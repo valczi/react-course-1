@@ -22,6 +22,10 @@ export default class Table {
     })
   }
 
+  addTaskAt(poz:number,Task: Task): void {
+    this.tasks.splice(poz, 0, Task);
+  }
+
   getTasks():Task[]{
     return this.tasks;
   }

@@ -4,7 +4,7 @@ import { Table } from './composant/table/table';
 import Task from './modele/task';
 import TableMetier from './modele/table';
 import ButtonAppBar from './composant/appbar/appbar';
-import { render } from '@testing-library/react';
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 let task1 = new Task('Faire a mangé', "Je suis une raclette");
 let task2 = new Task('Se laver', 'En gros faut prendre une douche');
@@ -61,12 +61,12 @@ export default () => {
         // console.log(myTables);
     }
 
-    const MoveCards = (idTable: string, idTableTarget: string, idCard: string) => {
-
-        console.log('ID CARD '+idCard);
-        console.log('ID TARGET '+idTableTarget);
-        console.log('ID TABLE '+idTable);
-
+    const MoveCards = (idTable: string, idTableTarget: string, idCard: string, cardPosition:number) => {
+/*
+        console.log('ID CARD ' + idCard);
+        console.log('ID TARGET ' + idTableTarget);
+        console.log('ID TABLE ' + idTable);
+*/
         let tablePerdante = myTables.find(element => element.getId() === idTable);
         let tableGagnante = myTables.find(element => element.getId() === idTableTarget);
         let pozPerdant = null;
@@ -82,10 +82,8 @@ export default () => {
                 }
                 return card.getId() !== idCard;
             }));
-            console.log('CARD TEMPO ');
-            console.log(cardTempo);
             if (cardTempo) {
-                tableGagnante.addTask(cardTempo);
+                tableGagnante.addTaskAt(cardPosition,cardTempo);
                 myTables[pozPerdant] = tablePerdante;
                 myTables[pozGagnant] = tableGagnante;
                 let newMyTables = new Array<TableMetier>();
@@ -101,7 +99,22 @@ export default () => {
 
     }
 
-    let addCard=(idTable:string,card:Task)=>{
+    function onDragEnd(result: DropResult) {
+        console.log(result);
+        let { source, destination, draggableId } = result;
+        if (!destination)
+            return;
+
+        let idTable = source.droppableId;
+        let idTableTarget = destination.droppableId;
+
+        MoveCards(idTable, idTableTarget, draggableId,destination.index);
+
+
+        //MoveCards(,,)
+    }
+
+    let addCard = (idTable: string, card: Task) => {
         let result = myTables.find(element => element.getId() === idTable);
         let poz = null;
         if (result) {
@@ -121,12 +134,13 @@ export default () => {
         <div>
             <ButtonAppBar addTable={addTable} />
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }} className="App">
-                {
-                    // console.log(myTables);
-                    myTables.map(table => {
-                        return <Table addCard={addCard} moveCard={MoveCards} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
-                    })
-                }
+                <DragDropContext onDragEnd={onDragEnd}>
+                    {
+                        myTables.map(table => {
+                            return <Table addCard={addCard} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
+                        })
+                    }
+                </DragDropContext>
             </div>
         </div>
     )
