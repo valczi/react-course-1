@@ -4,16 +4,18 @@ import ModalCard from '../modalCard/modalCard';
 import Task from '../../modele/task';
 import styles from './table.module.css';
 import { Droppable} from "react-beautiful-dnd";
+import Button from '@mui/material/Button';
 
 
 interface TableInterface {
   id: string, cards: Array<Task>, setCards: (idTable: string, idCard: string) => void,
   name: String,
   addCard: (idTable: string, card: Task) => void,
+  removeTable:(idTable:string)=>void,
 
 }
 
-export function Table({ addCard, id, cards, setCards, name }: TableInterface) {
+export function Table({ removeTable ,addCard, id, cards, setCards, name }: TableInterface) {
   // Déclare une nouvelle variable d'état, qu’on va appeler « count »
 
   const remove = (index: string) => {
@@ -45,6 +47,13 @@ export function Table({ addCard, id, cards, setCards, name }: TableInterface) {
           )}
         </Droppable>
       </div>
+      <Button variant="outlined" color="error"
+                  onClick={() => {
+                    removeTable(id);
+                  }}
+                >
+                  Delete
+                </Button>
     </div >
   );
 }

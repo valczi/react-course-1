@@ -114,6 +114,23 @@ export default () => {
         //MoveCards(,,)
     }
 
+    let removeTable=(idTable : String):void=>{
+        let result = myTables.find(element => element.getId() === idTable);
+        let poz=-1;
+        if(result)
+          poz= myTables.indexOf(result);
+        if(poz!==-1){
+            myTables.splice(poz,1);
+            let newMyTables = new Array<TableMetier>();
+            myTables.forEach(table => {
+                newMyTables.push(table);
+            })
+            setTables(newMyTables);
+            console.log(newMyTables);
+
+        }
+    }
+
     let addCard = (idTable: string, card: Task) => {
         let result = myTables.find(element => element.getId() === idTable);
         let poz = null;
@@ -137,7 +154,7 @@ export default () => {
                 <DragDropContext onDragEnd={onDragEnd}>
                     {
                         myTables.map(table => {
-                            return <Table addCard={addCard} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
+                            return <Table removeTable={removeTable} addCard={addCard} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
                         })
                     }
                 </DragDropContext>
