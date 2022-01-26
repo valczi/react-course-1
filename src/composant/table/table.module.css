@@ -2,6 +2,7 @@
     border-bottom: solid 1px;
     border-left: solid 1px;
     border-top: solid 1px;
-    min-height: 12em;
+    min-height: 8em;
     min-width: 12em;
+    padding: 2em;
 }

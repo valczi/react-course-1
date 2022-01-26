@@ -16,7 +16,6 @@ interface TableInterface {
 }
 
 export function Table({ removeTable ,addCard, id, cards, setCards, name }: TableInterface) {
-  // Déclare une nouvelle variable d'état, qu’on va appeler « count »
 
   const remove = (index: string) => {
     setCards(id, index);
