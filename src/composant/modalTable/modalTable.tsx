@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Task from '../../modele/task';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -42,9 +42,9 @@ export default function BasicModal({ idTable, addCard }: modalCard) {
             let descValue = desc.current.value;
 
             if (nameValue && descValue)
-                if (nameValue!=="" && descValue!=="") {
+                if (nameValue !== "" && descValue !== "") {
                     //console.log("VALUE : "+nameValue);
-                    addCard(idTable, new Task(nameValue, descValue));
+                    //addCard(idTable, new Task(nameValue, descValue));
                     name.current.value = "";
                     desc.current.value = "";
                     handleClose();

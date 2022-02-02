@@ -6,6 +6,7 @@ import TableMetier from './modele/table';
 import ButtonAppBar from './composant/appbar/appbar';
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
+/*
 let task1 = new Task('Faire a mangé', "Je suis une raclette");
 let task2 = new Task('Se laver', 'En gros faut prendre une douche');
 let task3 = new Task('Faire les courses', 'Tah les magasins et tout');
@@ -13,15 +14,15 @@ let task3 = new Task('Faire les courses', 'Tah les magasins et tout');
 let task4 = new Task('qszdfwsdcw', "Je suis dfwsdfune raclette");
 let task5 = new Task('qzefqzef', 'En gros wsdfwsfaut prendre une douche');
 let task6 = new Task('wsdfwsdfs', 'Tah lessdfwsdf magasins et tout');
-
+*/
 let table = new TableMetier("A faire");
-table.addTask(task1, task2, task3);
+//table.addTask(task1, task2, task3);
 
 let table2 = new TableMetier("En Cours");
-table2.addTask(task4, task5);
+//table2.addTask(task4, task5);
 
 let table3 = new TableMetier("Terminado");
-table3.addTask(task6);
+//table3.addTask(task6);
 
 
 
@@ -43,6 +44,53 @@ export default () => {
         }
     }
 
+    const sortByDateDeb = (idTable: string) => {
+        let result = myTables.find(element => element.getId() === idTable);
+        if (result) {
+            let resultSorted = result.getTasks().sort((taska, taskb) => {
+                return taska.getDateDebut().getTime() - taskb.getDateDebut().getTime()
+            }
+            );
+            myTables[myTables.indexOf(result)].setTasks(resultSorted);
+            let newMyTables = new Array<TableMetier>();
+            myTables.forEach(table => {
+                newMyTables.push(table);
+            })
+            setTables(newMyTables);
+        }
+    }
+
+    const sortByDateFin = (idTable: string) => {
+        let result = myTables.find(element => element.getId() === idTable);
+        if (result) {
+            let resultSorted = result.getTasks().sort((taska, taskb) => {
+                return taska.getDateFin().getTime() - taskb.getDateFin().getTime()
+            }
+            );
+            myTables[myTables.indexOf(result)].setTasks(resultSorted);
+            let newMyTables = new Array<TableMetier>();
+            myTables.forEach(table => {
+                newMyTables.push(table);
+            })
+            setTables(newMyTables);
+        }
+    }
+
+    const Filter = (idTable: string, filter: string) => {
+        switch (filter) {
+            case 'date_debut':
+                sortByDateDeb(idTable);
+                console.log("Tri par date debut");
+                break;
+            case 'date_fin':
+                sortByDateDeb(idTable);
+                console.log("Tri par date debut");
+                break;
+            default:
+                console.log("Filtre inconnu"); break;
+        }
+    }
+
     const setCards = (idTable: string, idCard: string) => {
         let result = myTables.find(element => element.getId() === idTable);
         let poz = null;
@@ -61,12 +109,12 @@ export default () => {
         // console.log(myTables);
     }
 
-    const MoveCards = (idTable: string, idTableTarget: string, idCard: string, cardPosition:number) => {
-/*
-        console.log('ID CARD ' + idCard);
-        console.log('ID TARGET ' + idTableTarget);
-        console.log('ID TABLE ' + idTable);
-*/
+    const MoveCards = (idTable: string, idTableTarget: string, idCard: string, cardPosition: number) => {
+        /*
+                console.log('ID CARD ' + idCard);
+                console.log('ID TARGET ' + idTableTarget);
+                console.log('ID TABLE ' + idTable);
+        */
         let tablePerdante = myTables.find(element => element.getId() === idTable);
         let tableGagnante = myTables.find(element => element.getId() === idTableTarget);
         let pozPerdant = null;
@@ -83,7 +131,7 @@ export default () => {
                 return card.getId() !== idCard;
             }));
             if (cardTempo) {
-                tableGagnante.addTaskAt(cardPosition,cardTempo);
+                tableGagnante.addTaskAt(cardPosition, cardTempo);
                 myTables[pozPerdant] = tablePerdante;
                 myTables[pozGagnant] = tableGagnante;
                 let newMyTables = new Array<TableMetier>();
@@ -91,7 +139,7 @@ export default () => {
                     newMyTables.push(table);
                 })
                 setTables(newMyTables);
-                console.log(newMyTables);
+                //console.log(newMyTables);
             }
         }
 
@@ -100,7 +148,7 @@ export default () => {
     }
 
     function onDragEnd(result: DropResult) {
-        console.log(result);
+        //console.log(result);
         let { source, destination, draggableId } = result;
         if (!destination)
             return;
@@ -108,25 +156,25 @@ export default () => {
         let idTable = source.droppableId;
         let idTableTarget = destination.droppableId;
 
-        MoveCards(idTable, idTableTarget, draggableId,destination.index);
+        MoveCards(idTable, idTableTarget, draggableId, destination.index);
 
 
         //MoveCards(,,)
     }
 
-    let removeTable=(idTable : String):void=>{
+    let removeTable = (idTable: String): void => {
         let result = myTables.find(element => element.getId() === idTable);
-        let poz=-1;
-        if(result)
-          poz= myTables.indexOf(result);
-        if(poz!==-1){
-            myTables.splice(poz,1);
+        let poz = -1;
+        if (result)
+            poz = myTables.indexOf(result);
+        if (poz !== -1) {
+            myTables.splice(poz, 1);
             let newMyTables = new Array<TableMetier>();
             myTables.forEach(table => {
                 newMyTables.push(table);
             })
             setTables(newMyTables);
-            console.log(newMyTables);
+            //console.log(newMyTables);
 
         }
     }
@@ -147,14 +195,26 @@ export default () => {
         // console.log(myTables);
     }
 
+    let modifyCard = (idTable: string, card: Task) => {
+        let result = myTables.find(element => element.getId() === idTable);
+        if (result) {
+            result.modifyTask(card);
+            let newMyTables = new Array<TableMetier>();
+            myTables.forEach(table => {
+                newMyTables.push(table);
+            })
+            setTables(newMyTables);
+        }
+    }
+
     return (
         <div>
             <ButtonAppBar addTable={addTable} />
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }} className="App">
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }} >
                 <DragDropContext onDragEnd={onDragEnd}>
                     {
                         myTables.map(table => {
-                            return <Table removeTable={removeTable} addCard={addCard} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
+                            return <Table filterBy={Filter} modifyCard={modifyCard} removeTable={removeTable} addCard={addCard} key={table.getId()} name={table.getTitle()} cards={table.getTasks()} setCards={setCards} id={table.getId()} />;
                         })
                     }
                 </DragDropContext>

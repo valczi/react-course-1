@@ -17,25 +17,31 @@ export default class Table {
   }
 
   addTask(...Tasks: Task[]): void {
-    Tasks.forEach(task=>{
+    Tasks.forEach(task => {
       this.tasks.push(task);
     })
   }
 
-  addTaskAt(poz:number,Task: Task): void {
+  addTaskAt(poz: number, Task: Task): void {
     this.tasks.splice(poz, 0, Task);
   }
 
-  getTasks():Task[]{
+  getTasks(): Task[] {
     return this.tasks;
   }
 
-  setTasks( Tasks:Array<Task>):void{
-     this.tasks=Tasks;
+  setTasks(Tasks: Array<Task>): void {
+    this.tasks = Tasks;
   }
 
 
   getId(): string {
     return this.id;
+  }
+
+  modifyTask(card: Task): void {
+    let result = this.tasks.find(element => element.getId() === card.getId());
+    if (result)
+      result=card;
   }
 }
