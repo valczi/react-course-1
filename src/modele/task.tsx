@@ -8,6 +8,7 @@ export default class Task {
   private dateDebut: Date;
   private dateFin: Date;
   private attachedTo: string;
+  private done: boolean;
 
   constructor(title: string, description: string, dateDebut: Date, dateFin: Date, attachedTo: string) {
     this.title = title;
@@ -16,10 +17,15 @@ export default class Task {
     this.dateDebut = dateDebut;
     this.dateFin = dateFin;
     this.attachedTo = attachedTo;
+    this.done = false;
   }
 
   getTitle(): string {
     return this.title;
+  }
+
+  getDone(): boolean {
+    return this.done;
   }
 
   getDescription(): string {
@@ -58,6 +64,10 @@ export default class Task {
 
   setAttachedTo(Attached: string): void {
     this.attachedTo = Attached;
+  }
+
+  setDone(done: boolean): void {
+    this.done = done;
   }
 
 }

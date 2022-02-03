@@ -6,6 +6,9 @@ import ModalCard from '../modalCard/modalCard';
 import Task from '../../modele/task';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import dateformat from 'dateformat';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 
 
@@ -34,17 +37,20 @@ const textDesign = {
 const assignedTo = {
   m: 1,
   marginLeft: 10,
-
 }
 
 
-export default function BasicCard({ idTable,modifyCard, index, card, remove, style }: BasicCardInterface) {
+export default function BasicCard({ idTable, modifyCard, index, card, remove, style }: BasicCardInterface) {
 
-  let dateDebut = card.getDateDebut();
   let dateFin = card.getDateFin();
   let styleDate = {};
 
-  if (dateFin < new Date())
+  if (card.getDone()) {
+    styleDate = {
+      marginBottom: 2,
+      border: 'solid 2px #42f56f'
+    }
+  } else if (dateFin < new Date())
     styleDate = {
       marginBottom: 2,
       border: 'solid 2px #ff1241'
@@ -54,14 +60,26 @@ export default function BasicCard({ idTable,modifyCard, index, card, remove, sty
       marginBottom: 2,
     }
 
+  const handleChange = (event: any, checked: boolean) => {
+    console.log(checked);
+    card.setDone(checked);
+    modifyCard(idTable,card);
+  }
+
   return (
     <Card id={card.getId()} sx={styleDate} >
+
       <CardContent sx={{
         borderBottom: 'solid 1px #c2c2c2'
       }}>
+
         <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
           {card.getTitle()}
         </Typography>
+
+
+
+
         <Typography sx={textDesign} variant="body2">
           {card.getDescription()}
         </Typography>
@@ -72,20 +90,26 @@ export default function BasicCard({ idTable,modifyCard, index, card, remove, sty
           padding: '2px',
         }}>
           <Typography sx={design} variant="body1">
-            {dateDebut.getDate() + '/' + dateDebut.getMonth() + '/' + dateFin.getFullYear()}
+            {dateformat(card.getDateDebut(), "m/dd/yyyy")}
           </Typography>
           <Typography sx={design} variant="body1">
-            {' ' + dateFin.getDate() + '/' + dateFin.getUTCMonth() + '/' + dateFin.getFullYear()}
+            {' ' + dateformat(card.getDateFin(), "m/dd/yyyy")}
           </Typography>
         </div>
-        <Typography sx={assignedTo} color="text.secondary" variant="body2">
-          {"Assigné à : " + card.getAttachedTo()}
-        </Typography>
+        <div style={{
+          display: 'Flex',
+          justifyContent: 'space-around'
+        }}>
+          <FormControlLabel control={<Checkbox checked={card.getDone()}/>} onChange={handleChange} label="Done" sx={{ p: 1 }} />
+          <Typography sx={assignedTo} color="text.secondary" variant="body2">
+            {"Assigné à : " + card.getAttachedTo()}
+          </Typography>
+        </div>
       </CardContent>
       <CardActions sx={{
-        display:'flex',
-        justifyContent:'space-around',
-        m:1
+        display: 'flex',
+        justifyContent: 'space-around',
+        m: 1
       }}>
         <Button variant="outlined" color="error"
           onClick={() => {

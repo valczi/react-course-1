@@ -53,6 +53,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
         defaultDesc = card.getDescription();
         defaultDateDebut = dateformat(card.getDateDebut(), "yyyy-m-dd");
         defaultDateFin = dateformat(card.getDateFin(), "yyyy-m-dd");
+        defaultAssignedTo = card.getAttachedTo();
         logo = 'Validate';
         logoOpen = 'Edit'
     }
