@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -6,6 +6,36 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Task from '../../modele/task';
 import dateformat from 'dateformat';
+import Swal from 'sweetalert2';
+import MenuItem from '@mui/material/MenuItem';
+
+
+const prorities = [
+    {
+      value: 1,
+      label: '1',
+    },
+    {
+      value: 2,
+      label: '2',
+    },
+    {
+      value: 3,
+      label: '3',
+    },
+    {
+      value: 4,
+      label: '4',
+    },
+    {
+    value: 5,
+    label: '5',
+    },
+    {
+    value: 6,
+    label: '6',
+    },
+  ];
 
 interface modalCard {
     idTable: string,
@@ -31,7 +61,10 @@ const style = {
 };
 
 export default function BasicModal({ card, idTable, addCard }: modalCard) {
+    console.log('render');
     const [open, setOpen] = React.useState(false);
+    const [priority, setPriority] = React.useState(1);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const name = React.createRef<HTMLInputElement>();
@@ -39,23 +72,37 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
     const dateDepart = React.createRef<HTMLInputElement>();
     const dateFinis = React.createRef<HTMLInputElement>();
     const attribueA = React.createRef<HTMLInputElement>();
-    let defaultName = '';
-    let defaultDesc = '';
-    let defaultDateDebut = '2020-12-12';
-    let defaultDateFin = '2021-12-12';
-    let defaultAssignedTo = '';
-    let logo = '+';
-    let logoOpen = 'Add';
 
-    if (card) {
+    const [settings,setSettings] =React.useState({
+        defaultName : '',
+        defaultDesc : '',
+        defaultDateDebut : '2020-12-12',
+        defaultDateFin : '2021-12-12',
+        defaultAssignedTo : '',
+        logo : '+',
+        logoOpen : 'Add',
+    })
 
-        defaultName = card.getTitle();
-        defaultDesc = card.getDescription();
-        defaultDateDebut = dateformat(card.getDateDebut(), "yyyy-m-dd");
-        defaultDateFin = dateformat(card.getDateFin(), "yyyy-m-dd");
-        defaultAssignedTo = card.getAttachedTo();
-        logo = 'Validate';
-        logoOpen = 'Edit'
+
+    useEffect(() => {
+        if (card) {
+            setSettings({
+                defaultName : card.getTitle(),
+                defaultDesc : card.getDescription(),
+                defaultDateDebut : dateformat(card.getDateDebut(), "yyyy-dd-mm"),
+                defaultDateFin : dateformat(card.getDateFin(), "yyyy-dd-mm"),
+                defaultAssignedTo : card.getAttachedTo(),
+                logo : 'Validate',
+                logoOpen : 'Edit',
+            })
+            setPriority(card.getPriority());
+        }
+    },[])
+
+
+
+    const handleChange=(event:any)=>{
+        setPriority(event.target.value);
     }
 
     const add = () => {
@@ -66,9 +113,6 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
             let dateDebut = dateDepart.current.value;
             let dateFin = dateFinis.current.value;
             let attachedTo = attribueA.current.value;
-
-
-
 
 
             if (nameValue && descValue && dateFin && dateDebut && attachedTo)
@@ -88,8 +132,15 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             console.log(card);
                             addCard(idTable, card);
                         } else
-                            addCard(idTable, new Task(nameValue, descValue, dateDeb, dateF, attachedTo));
+                            addCard(idTable, new Task(nameValue, descValue, dateDeb, dateF, attachedTo,priority));
                         handleClose();
+                        Swal.fire({
+                            position: 'top',
+                            icon: 'success',
+                            //title: 'Your work has been saved',
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
                     }
 
                 }
@@ -99,7 +150,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleOpen}>{logoOpen}</Button>
+            <Button variant="outlined" onClick={handleOpen}>{settings.logoOpen}</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -107,16 +158,32 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {logoOpen} :
+                        {settings.logoOpen} :
                     </Typography>
                     <div id="modal-modal-description" >
+                    <TextField
+                        sx={{ m: 2, width: 0.9 }}
+                        id="outlined-select-currency"
+                        select
+                        label="Select"
+                        value={priority}
+                        onChange={handleChange}
+                        helperText="Select prority"
+                        >
+                        {prorities.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                            </MenuItem>
+                        ))}
+                        </TextField>
                         <TextField
                             sx={{ m: 2, width: 0.9 }}
                             required
                             id="outlined-required"
                             label="Name"
-                            defaultValue={defaultName}
+                            defaultValue={settings.defaultName}
                             inputRef={name}
                         />
                         <TextField
@@ -126,7 +193,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             label="Description"
                             multiline
                             rows={4}
-                            defaultValue={defaultDesc}
+                            defaultValue={settings.defaultDesc}
                             inputRef={desc}
                         />
                         <TextField
@@ -134,7 +201,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             id="date"
                             label="Date début"
                             type="date"
-                            defaultValue={defaultDateDebut}
+                            defaultValue={settings.defaultDateDebut}
                             inputRef={dateDepart}
                         />
 
@@ -143,7 +210,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             id="date"
                             label="Date fin"
                             type="date"
-                            defaultValue={defaultDateFin}
+                            defaultValue={settings.defaultDateFin}
                             inputRef={dateFinis}
                         />
                         <TextField
@@ -151,11 +218,11 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             required
                             id="outlined-required"
                             label="Attribuer a :"
-                            defaultValue={defaultAssignedTo}
+                            defaultValue={settings.defaultAssignedTo}
                             inputRef={attribueA}
                         />
                     </div>
-                    <Button variant="outlined" onClick={add}>{logo}</Button>
+                    <Button variant="outlined" onClick={add}>{settings.logo}</Button>
                 </Box>
             </Modal>
         </div>

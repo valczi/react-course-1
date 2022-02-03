@@ -61,7 +61,7 @@ export default function BasicCard({ idTable, modifyCard, index, card, remove, st
     }
 
   const handleChange = (event: any, checked: boolean) => {
-    console.log(checked);
+    //console.log(checked);
     card.setDone(checked);
     modifyCard(idTable,card);
   }
@@ -70,15 +70,12 @@ export default function BasicCard({ idTable, modifyCard, index, card, remove, st
     <Card id={card.getId()} sx={styleDate} >
 
       <CardContent sx={{
-        borderBottom: 'solid 1px #c2c2c2'
+        borderBottom: 'solid 1px #c2c2c2',
       }}>
 
         <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
-          {card.getTitle()}
+          {card.getTitle() + ' : ' + card.getPriority()}
         </Typography>
-
-
-
 
         <Typography sx={textDesign} variant="body2">
           {card.getDescription()}

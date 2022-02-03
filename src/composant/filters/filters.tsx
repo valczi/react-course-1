@@ -9,7 +9,7 @@ interface modalCard {
 }
 
 
-const options = ['Date debut', 'Date fin'];
+const options = ['Date debut', 'Date fin','Priorite'];
 
 
 

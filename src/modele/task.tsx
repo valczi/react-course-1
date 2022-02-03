@@ -9,8 +9,9 @@ export default class Task {
   private dateFin: Date;
   private attachedTo: string;
   private done: boolean;
+  private priority:number;
 
-  constructor(title: string, description: string, dateDebut: Date, dateFin: Date, attachedTo: string) {
+  constructor(title: string, description: string, dateDebut: Date, dateFin: Date, attachedTo: string,priority:number) {
     this.title = title;
     this.description = description;
     this.id = uuidv4();
@@ -18,6 +19,11 @@ export default class Task {
     this.dateFin = dateFin;
     this.attachedTo = attachedTo;
     this.done = false;
+    this.priority=priority;
+  }
+
+  getPriority(): number {
+    return this.priority;
   }
 
   getTitle(): string {
@@ -68,6 +74,10 @@ export default class Task {
 
   setDone(done: boolean): void {
     this.done = done;
+  }
+
+  setPriority(prority:number): void {
+     this.priority=prority;;
   }
 
 }

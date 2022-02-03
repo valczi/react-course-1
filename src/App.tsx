@@ -6,23 +6,24 @@ import TableMetier from './modele/table';
 import ButtonAppBar from './composant/appbar/appbar';
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
-/*
-let task1 = new Task('Faire a mangé', "Je suis une raclette");
-let task2 = new Task('Se laver', 'En gros faut prendre une douche');
-let task3 = new Task('Faire les courses', 'Tah les magasins et tout');
 
-let task4 = new Task('qszdfwsdcw', "Je suis dfwsdfune raclette");
-let task5 = new Task('qzefqzef', 'En gros wsdfwsfaut prendre une douche');
-let task6 = new Task('wsdfwsdfs', 'Tah lessdfwsdf magasins et tout');
-*/
+let task1 = new Task('Faire a mangé', "Je suis une raclette",new Date(),new Date("2080-12-12"),"Khouleman",1);
+let task2 = new Task('Se laver', 'En gros faut prendre une douche',new Date(),new Date(),"P-J",3);
+let task3 = new Task('Faire les courses', 'Tah les magasins et tout',new Date(),new Date("2025-12-09"),"Chris",4);
+
+let task4 = new Task('MAGICIEN', "Je suis une raclette",new Date(),new Date("2022-05-05"),"Eric",5);
+let task5 = new Task('je pue', 'En gros faut prendre une douche',new Date(),new Date("2023-02-01"),"Allan",2);
+let task6 = new Task('Course', 'Tah les auchans et tout',new Date("2021-02-09"),new Date(),"Flo",2);
+task6.setDone(true);
+
 let table = new TableMetier("A faire");
-//table.addTask(task1, task2, task3);
+table.addTask(task1, task2, task3);
 
 let table2 = new TableMetier("En Cours");
-//table2.addTask(task4, task5);
+table2.addTask(task4, task5);
 
 let table3 = new TableMetier("Terminado");
-//table3.addTask(task6);
+table3.addTask(task6);
 
 
 
@@ -76,6 +77,22 @@ export default () => {
         }
     }
 
+    const sortByDatePriority = (idTable: string) => {
+        let result = myTables.find(element => element.getId() === idTable);
+        if (result) {
+            let resultSorted = result.getTasks().sort((taska, taskb) => {
+                return taska.getPriority() - taskb.getPriority()
+            }
+            );
+            myTables[myTables.indexOf(result)].setTasks(resultSorted);
+            let newMyTables = new Array<TableMetier>();
+            myTables.forEach(table => {
+                newMyTables.push(table);
+            })
+            setTables(newMyTables);
+        }
+    }
+
     const Filter = (idTable: string, filter: string) => {
         switch (filter) {
             case 'date_debut':
@@ -83,7 +100,11 @@ export default () => {
                 console.log("Tri par date debut");
                 break;
             case 'date_fin':
-                sortByDateDeb(idTable);
+                sortByDateFin(idTable);
+                console.log("Tri par date debut");
+                break;
+            case 'priorite':
+                sortByDatePriority(idTable);
                 console.log("Tri par date debut");
                 break;
             default:

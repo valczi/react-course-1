@@ -6,6 +6,8 @@ import Task from '../../modele/task';
 import { Droppable } from "react-beautiful-dnd";
 import Button from '@mui/material/Button';
 import { Draggable } from "react-beautiful-dnd";
+import {FixedSizeList as List} from "react-window";
+//import AutoSizer from "react-virtualized-auto-sizer";
 
 interface TableInterface {
   id: string, cards: Array<Task>, setCards: (idTable: string, idCard: string) => void,
