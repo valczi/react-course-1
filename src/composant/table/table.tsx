@@ -3,10 +3,9 @@ import BasicCard from '../card/card';
 import ModalCard from '../modalCard/modalCard';
 import Filters from '../filters/filters';
 import Task from '../../modele/task';
-import { Droppable } from "react-beautiful-dnd";
+import { DraggingStyle, Droppable, NotDraggingStyle } from "react-beautiful-dnd";
 import Button from '@mui/material/Button';
 import { Draggable } from "react-beautiful-dnd";
-import {FixedSizeList as List} from "react-window";
 //import AutoSizer from "react-virtualized-auto-sizer";
 
 interface TableInterface {
@@ -24,7 +23,7 @@ const getListStyle = (isDraggingOver: boolean) => ({
   margin: 8,
   width: 300,
 })
-const getItemStyle = (isDragging: boolean, draggableStyle: any) => {
+const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle | undefined) => {
   // styles we need to apply on draggables
   return { ...draggableStyle, marignBottom: 20 }
 };

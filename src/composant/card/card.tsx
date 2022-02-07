@@ -15,9 +15,9 @@ import Checkbox from '@mui/material/Checkbox';
 interface BasicCardInterface {
   idTable: string,
   card: Task,
-  remove: any,
+  remove: (index: string) => void,
   index: number,
-  style: any,
+  style: {},
   modifyCard: (idTable: string, card: Task) => void,
 }
 
@@ -60,10 +60,10 @@ export default function BasicCard({ idTable, modifyCard, index, card, remove, st
       marginBottom: 2,
     }
 
-  const handleChange = (event: any, checked: boolean) => {
+  const handleChange = (event: React.SyntheticEvent<Element, Event>, checked: boolean) => {
     //console.log(checked);
     card.setDone(checked);
-    modifyCard(idTable,card);
+    modifyCard(idTable, card);
   }
 
   return (
@@ -97,7 +97,7 @@ export default function BasicCard({ idTable, modifyCard, index, card, remove, st
           display: 'Flex',
           justifyContent: 'space-around'
         }}>
-          <FormControlLabel control={<Checkbox checked={card.getDone()}/>} onChange={handleChange} label="Done" sx={{ p: 1 }} />
+          <FormControlLabel control={<Checkbox checked={card.getDone()} />} onChange={handleChange} label="Done" sx={{ p: 1 }} />
           <Typography sx={assignedTo} color="text.secondary" variant="body2">
             {"Assigné à : " + card.getAttachedTo()}
           </Typography>
