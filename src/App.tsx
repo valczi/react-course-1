@@ -97,18 +97,18 @@ export default () => {
         switch (filter) {
             case 'date_debut':
                 sortByDateDeb(idTable);
-                console.log("Tri par date debut");
+                //console.log("Tri par date debut");
                 break;
             case 'date_fin':
                 sortByDateFin(idTable);
-                console.log("Tri par date debut");
+                //console.log("Tri par date debut");
                 break;
             case 'priorite':
                 sortByDatePriority(idTable);
-                console.log("Tri par date debut");
+                //console.log("Tri par date debut");
                 break;
             default:
-                console.log("Filtre inconnu"); break;
+                //console.log("Filtre inconnu"); break;
         }
     }
 

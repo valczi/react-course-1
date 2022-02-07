@@ -61,7 +61,7 @@ const style = {
 };
 
 export default function BasicModal({ card, idTable, addCard }: modalCard) {
-    console.log('render');
+    //console.log('render');
     const [open, setOpen] = React.useState(false);
     const [priority, setPriority] = React.useState(1);
 
@@ -129,7 +129,7 @@ export default function BasicModal({ card, idTable, addCard }: modalCard) {
                             card.setTitle(nameValue);
                             card.setDescription(descValue);
                             card.setAttachedTo(attachedTo);
-                            console.log(card);
+                            //console.log(card);
                             addCard(idTable, card);
                         } else
                             addCard(idTable, new Task(nameValue, descValue, dateDeb, dateF, attachedTo,priority));

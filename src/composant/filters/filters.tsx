@@ -18,7 +18,7 @@ export default function Filters({filterBy,idTable}:modalCard) {
     const [inputValue, setInputValue] = React.useState('');
 
     const filter = (valueNow: string) => {
-        console.log(valueNow.replace(' ', '_').toLocaleLowerCase());
+        //console.log(valueNow.replace(' ', '_').toLocaleLowerCase());
         filterBy(idTable,valueNow.replace(' ', '_').toLocaleLowerCase());
     }
 
